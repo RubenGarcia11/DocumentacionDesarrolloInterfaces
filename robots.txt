@@ -1,0 +1,3 @@
+User-agent: *
+Disallow:
+Sitemap: https://RubenGarcia11.github.io/DocumentacionDesarrolloInterfaces/sitemap.xml

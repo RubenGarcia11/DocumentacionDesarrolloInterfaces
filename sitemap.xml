@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="https://RubenGarcia11.github.io/DocumentacionDesarrolloInterfaces/sitemap.xsl"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+<url>
+<loc>https://RubenGarcia11.github.io/DocumentacionDesarrolloInterfaces/</loc>
+</url>
+<url>
+<loc>https://RubenGarcia11.github.io/DocumentacionDesarrolloInterfaces/pomodoro.html</loc>
+<lastmod>2025-10-13T12:37:37+02:00</lastmod>
+<image:image>
+<image:loc>https://RubenGarcia11.github.io/DocumentacionDesarrolloInterfaces/media/posts/1//v1.png</image:loc>
+<image:title><![CDATA[Primera Versión Pomodoro]]></image:title>
+</image:image>
+<image:image>
+<image:loc>https://RubenGarcia11.github.io/DocumentacionDesarrolloInterfaces/media/posts/1/v2_1.png</image:loc>
+<image:title><![CDATA[version 2]]></image:title>
+</image:image>
+<image:image>
+<image:loc>https://RubenGarcia11.github.io/DocumentacionDesarrolloInterfaces/media/posts/1/v2_menu.png</image:loc>
+<image:title><![CDATA[Menu de la versión 2]]></image:title>
+</image:image>
+<image:image>
+<image:loc>https://RubenGarcia11.github.io/DocumentacionDesarrolloInterfaces/media/posts/1/v3_1.png</image:loc>
+<image:title><![CDATA[Versión 3]]></image:title>
+</image:image>
+<image:image>
+<image:loc>https://RubenGarcia11.github.io/DocumentacionDesarrolloInterfaces/media/posts/1/v3_menu.png</image:loc>
+<image:title><![CDATA[Versión 3 Menú]]></image:title>
+</image:image>
+</url>
+</urlset>
