@@ -3,7 +3,7 @@
     <title>Desarrollo de interfaces</title>
     <link href="https://RubenGarcia11.github.io/DocumentacionDesarrolloInterfaces/feed.xml" rel="self" />
     <link href="https://RubenGarcia11.github.io/DocumentacionDesarrolloInterfaces" />
-    <updated>2025-10-13T12:37:37+02:00</updated>
+    <updated>2025-10-17T14:50:14+02:00</updated>
     <author>
         <name>Rubén García</name>
     </author>
@@ -128,7 +128,11 @@
 <figure class="post__image"><img loading="lazy"  src="https://RubenGarcia11.github.io/DocumentacionDesarrolloInterfaces/media/posts/1/v3_menu.png" alt="Versión 3 Menú" width="706" height="705" sizes="(max-width: 1920px) 100vw, 1920px" srcset="https://RubenGarcia11.github.io/DocumentacionDesarrolloInterfaces/media/posts/1/responsive/v3_menu-xs.png 640w ,https://RubenGarcia11.github.io/DocumentacionDesarrolloInterfaces/media/posts/1/responsive/v3_menu-sm.png 768w ,https://RubenGarcia11.github.io/DocumentacionDesarrolloInterfaces/media/posts/1/responsive/v3_menu-md.png 1024w ,https://RubenGarcia11.github.io/DocumentacionDesarrolloInterfaces/media/posts/1/responsive/v3_menu-lg.png 1366w ,https://RubenGarcia11.github.io/DocumentacionDesarrolloInterfaces/media/posts/1/responsive/v3_menu-xl.png 1600w ,https://RubenGarcia11.github.io/DocumentacionDesarrolloInterfaces/media/posts/1/responsive/v3_menu-2xl.png 1920w"></figure>
 <p>Podemos apreciar como se ha corregido lo que hemos indicado, no es muy estético pero primero vamos a terminar la funcionalidad y despues retocaremos la parte estética junto a el selector de temas y modo oscuro.</p>
 <h4 data-start="158" data-end="609">Nuevas funcionalidades: 4º Prompt</h4>
-<p> </p>
+<blockquote>
+<p data-start="120" data-end="338">Implementa un <strong data-start="158" data-end="187">sistema de notificaciones</strong> que avise al usuario del <strong data-start="213" data-end="267">inicio y finalización de los pomodoros y descansos</strong>, incluso cuando la aplicación <strong data-start="298" data-end="335">no esté activa o en segundo plano</strong>.</p>
+<p data-start="340" data-end="680">Asegúrate de que la aplicación sea <strong data-start="375" data-end="405">totalmente multiplataforma</strong>, adaptándose correctamente tanto a <strong data-start="441" data-end="456">ordenadores</strong> como a <strong data-start="464" data-end="488">dispositivos móviles</strong>.<br data-start="489" data-end="492">La interfaz debe <strong data-start="509" data-end="546" data-is-only-node="">ajustarse visual y funcionalmente</strong> a cada tipo de dispositivo, garantizando una <strong data-start="592" data-end="626">experiencia fluida y atractiva</strong> en pantallas de diferentes tamaños y orientaciones.</p>
+</blockquote>
+<figure class="post__image"><img loading="lazy"  src="https://RubenGarcia11.github.io/DocumentacionDesarrolloInterfaces/media/posts/1/Captura-de-pantalla-2025-10-17-a-las-14.49.50.png" alt="" width="2160" height="1352" sizes="(max-width: 1920px) 100vw, 1920px" srcset="https://RubenGarcia11.github.io/DocumentacionDesarrolloInterfaces/media/posts/1/responsive/Captura-de-pantalla-2025-10-17-a-las-14.49.50-xs.png 640w ,https://RubenGarcia11.github.io/DocumentacionDesarrolloInterfaces/media/posts/1/responsive/Captura-de-pantalla-2025-10-17-a-las-14.49.50-sm.png 768w ,https://RubenGarcia11.github.io/DocumentacionDesarrolloInterfaces/media/posts/1/responsive/Captura-de-pantalla-2025-10-17-a-las-14.49.50-md.png 1024w ,https://RubenGarcia11.github.io/DocumentacionDesarrolloInterfaces/media/posts/1/responsive/Captura-de-pantalla-2025-10-17-a-las-14.49.50-lg.png 1366w ,https://RubenGarcia11.github.io/DocumentacionDesarrolloInterfaces/media/posts/1/responsive/Captura-de-pantalla-2025-10-17-a-las-14.49.50-xl.png 1600w ,https://RubenGarcia11.github.io/DocumentacionDesarrolloInterfaces/media/posts/1/responsive/Captura-de-pantalla-2025-10-17-a-las-14.49.50-2xl.png 1920w"></figure>
 <p> </p>
             ]]>
         </content>
