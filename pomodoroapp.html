@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="es" id="html-lang">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-translate-key="appTitle">Temporizador Pomodoro</title>
+    <!-- Estilos CSS para la aplicación -->
+    <style>
+        :root, body[data-theme="light"] {
+            --color-primario: #d95550; /* Cambia según el modo pomodoro/descanso */
+            --color-secundario: #f0eae2;
+            --color-texto: #333;
+            --color-fondo: #fdfcfa;
+            --color-contenedor-bg: white;
+            --color-input-border: #e0e0e0;
+            --sombra-suave: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        body[data-theme="dark"] {
+            --color-secundario: #3a3a3a;
+            --color-texto: #e0e0e0;
+            --color-fondo: #121212;
+            --color-contenedor-bg: #1e1e1e;
+            --color-input-border: #444;
+            --sombra-suave: 0 4px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        body[data-theme="forest"] {
+            --color-secundario: #a3b899;
+            --color-texto: #2a3d45;
+            --color-fondo: #eef2e6;
+            --color-contenedor-bg: #f7f9f2;
+            --color-input-border: #c9d4c5;
+            --sombra-suave: 0 4px 15px rgba(42, 61, 69, 0.1);
+        }
+
+        body[data-theme="ocean"] {
+            --color-secundario: #88c0d0;
+            --color-texto: #2e3440;
+            --color-fondo: #e5e9f0;
+            --color-contenedor-bg: #eceff4;
+            --color-input-border: #d8dee9;
+            --sombra-suave: 0 4px 15px rgba(46, 52, 64, 0.1);
+        }
+
+        body {
+            background-color: var(--color-fondo);
+            color: var(--color-texto);
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            transition: background-color 0.5s ease, color 0.5s ease;
+        }
+
+        .pomodoro-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .pomodoro-container, .tasks-container {
+            background-color: var(--color-contenedor-bg);
+            padding: 2rem;
+            border-radius: 1.5rem;
+            box-shadow: var(--sombra-suave);
+            width: 90vw;
+            max-width: 480px;
+            text-align: center;
+            position: relative;
+            transition: background-color 0.5s ease;
+        }
+        
+        .top-bar {
+            position: absolute;
+            top: 1.5rem;
+            left: 1.5rem;
+            right: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .top-bar .left-controls, .top-bar .right-controls { display: flex; align-items: center; gap: 0.5rem; }
+
+        .icon-button {
+            background: none; border: none; cursor: pointer; padding: 0.5rem; display: flex; align-items: center; justify-content: center;
+        }
+        .icon-button svg {
+            width: 26px; height: 26px; fill: var(--color-texto); opacity: 0.6; transition: opacity 0.2s ease, transform 0.2s ease;
+        }
+        .icon-button:hover svg { opacity: 1; transform: scale(1.1) rotate(5deg); }
+
+        #detach-button { display: none; }
+        
+        .language-select {
+            background-color: var(--color-secundario); border: none; border-radius: 0.5rem; padding: 0.3rem 0.5rem; font-weight: bold; opacity: 0.8; cursor: pointer; color: var(--color-texto);
+        }
+        .language-select:hover { opacity: 1; }
+
+        .clock {
+            font-size: 1.1rem; font-weight: bold; opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s ease; background-color: var(--color-secundario); padding: 0.4rem 0.8rem; border-radius: 0.7rem; box-shadow: var(--sombra-suave); position: absolute; left: 50%; transform: translateX(-50%);
+        }
+        .clock.visible { opacity: 1; visibility: visible; }
+
+        h1 { color: var(--color-primario); margin-top: 3.5rem; margin-bottom: 1.5rem; }
+
+        .modes { display: flex; justify-content: center; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+        .mode-button { background: none; border: 2px solid transparent; border-radius: 0.5rem; padding: 0.5rem 1rem; font-size: 1rem; font-weight: bold; cursor: pointer; color: var(--color-texto); opacity: 0.7; transition: all 0.3s ease; }
+        .mode-button.active { background-color: var(--color-primario); color: white; opacity: 1; }
+        .mode-button:hover:not(.active) { opacity: 1; border-color: var(--color-primario); }
+
+        .timer { font-size: clamp(3.5rem, 20vw, 5rem); font-weight: bold; margin-bottom: 1.5rem; color: var(--color-primario); }
+
+        .controls { display: flex; justify-content: center; gap: 1rem; }
+        .control-button { background-color: var(--color-primario); color: white; border: none; border-radius: 0.5rem; padding: 0.8rem 2rem; font-size: 1.2rem; font-weight: bold; cursor: pointer; transition: transform 0.2s ease, box-shadow 0.2s ease; box-shadow: var(--sombra-suave); }
+        .control-button:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(217, 85, 80, 0.4); }
+        .control-button:active { transform: translateY(1px); }
+        
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center; opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s ease; z-index: 1000; }
+        .modal-overlay.visible { opacity: 1; visibility: visible; }
+        .modal-content { background: var(--color-contenedor-bg); padding: 2rem; border-radius: 1.5rem; width: 90%; max-width: 420px; transform: scale(0.9); transition: transform 0.3s ease, background-color 0.5s ease; box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
+        .modal-overlay.visible .modal-content { transform: scale(1); }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--color-secundario); padding-bottom: 1rem; margin-bottom: 1.5rem; color: var(--color-primario); }
+        .modal-header h2 { margin: 0; }
+        .close-button { background: none; border: none; font-size: 2.5rem; cursor: pointer; line-height: 1; color: var(--color-texto); opacity: 0.5; transition: opacity 0.2s ease; }
+        .close-button:hover { opacity: 1; }
+        .form-group { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.2rem; }
+        .form-group label { font-weight: bold; color: var(--color-texto); opacity: 0.9; text-align: left; }
+        .form-group input[type="number"], .form-group select { margin-left: 1rem; width: 80px; padding: 0.5rem; border-radius: 0.5rem; border: 2px solid var(--color-input-border); background-color: var(--color-contenedor-bg); color: var(--color-texto); font-weight: bold; transition: border-color 0.2s ease; }
+        .form-group input[type="number"]:focus, .form-group select:focus { outline: none; border-color: var(--color-primario); }
+        .form-group select { width: auto; flex-grow: 1; max-width: 180px; }
+        .form-group .action-button { padding: 0.5rem 1rem; border: none; background: var(--color-primario); color: white; border-radius: 0.5rem; cursor: pointer;}
+        .form-group .action-button:disabled { background-color: #888; color: #ccc; cursor: not-allowed; }
+        hr { border: none; height: 2px; background-color: var(--color-secundario); margin: 1.5rem 0; }
+
+        .tasks-container { padding: 1.5rem; display: none; }
+        .tasks-container h2 { margin-top: 0; color: var(--color-primario); }
+        #task-list { list-style: none; padding: 0; margin: 1rem 0; max-height: 200px; overflow-y: auto; }
+        #task-list li { display: flex; align-items: center; padding: 0.5rem; border-bottom: 1px solid var(--color-secundario); }
+        #task-list li.completed label { text-decoration: line-through; opacity: 0.6; }
+        #task-list input[type="checkbox"] { margin-right: 0.8rem; }
+        #task-list label { flex-grow: 1; text-align: left;}
+        .delete-task { background: none; border: none; cursor: pointer; color: #d95550; font-weight: bold; }
+        #new-task-form { display: flex; gap: 0.5rem; }
+        #new-task-input { flex-grow: 1; border: 2px solid var(--color-input-border); border-radius: 0.5rem; padding: 0.5rem; background-color: var(--color-contenedor-bg); color: var(--color-texto); }
+        #add-task-button { border: none; background: var(--color-primario); color: white; padding: 0.5rem 1rem; border-radius: 0.5rem; cursor: pointer; }
+        .task-io { display: flex; gap: 0.5rem; justify-content: center; margin-top: 1rem; }
+        .task-io button { font-size: 0.8rem; background: var(--color-secundario); border: none; padding: 0.4rem 0.8rem; border-radius: 0.5rem; cursor: pointer; color: var(--color-texto);}
+        #import-file-input { display: none; }
+        
+        /* Colores de Modos */
+        body.pomodoro-active { --color-primario: #d95550; }
+        body.short-break-active { --color-primario: #4c9195; }
+        body.long-break-active { --color-primario: #457ca3; }
+        /* Sobrescribir colores para temas */
+        body[data-theme="forest"].pomodoro-active { --color-primario: #c97c5d; }
+        body[data-theme="forest"].short-break-active { --color-primario: #6a994e; }
+        body[data-theme="forest"].long-break-active { --color-primario: #386641; }
+        body[data-theme="ocean"].pomodoro-active { --color-primario: #bf616a; }
+        body[data-theme="ocean"].short-break-active { --color-primario: #81a1c1; }
+        body[data-theme="ocean"].long-break-active { --color-primario: #5e81ac; }
+
+        @media (min-width: 768px) { #detach-button { display: flex; } }
+        @media (max-width: 480px) {
+            .pomodoro-container { padding: 1.5rem; }
+            h1 { font-size: 1.8rem; margin-top: 4rem; }
+            .top-bar { left: 1rem; right: 1rem; top: 1rem; }
+            .clock { display: none; }
+        }
+    </style>
+</head>
+<body data-theme="light">
+    <div class="pomodoro-wrapper">
+        <main class="pomodoro-container">
+            <div class="top-bar">
+                <div class="left-controls">
+                    <select class="language-select" id="language-select">
+                        <option value="es">ES</option>
+                        <option value="en">EN</option>
+                    </select>
+                </div>
+                <div class="clock" id="clock">12:00:00</div>
+                <div class="right-controls">
+                    <button class="icon-button" id="detach-button" aria-label="Desacoplar ventana" data-translate-aria="detachWindowAria">
+                        <svg viewBox="0 0 24 24"><path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/></svg>
+                    </button>
+                    <button class="icon-button" id="tasks-button" aria-label="Mostrar tareas" data-translate-aria="showTasksAria">
+                        <svg viewBox="0 0 24 24"><path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zm0-8h14V7H7v2z"/></svg>
+                    </button>
+                    <button class="icon-button" id="settings-button" aria-label="Abrir configuración" data-translate-aria="openSettingsAria">
+                        <svg viewBox="0 0 512 512"><path d="M495.9 166.6c3.2 8.7 .5 18.4-6.4 24.6l-43.3 39.4c1.1 8.3 1.7 16.8 1.7 25.4s-.6 17.1-1.7 25.4l43.3 39.4c6.9 6.2 9.6 15.9 6.4 24.6c-4.4 11.9-9.7 23.3-15.8 34.3l-4.7 8.1c-6.6 11-14 21.4-22.1 31.2c-5.9 7.2-15.7 9.6-24.5 6.8l-55.7-17.7c-13.4 10.3-28.2 18.9-44 25.4l-12.5 57.1c-2 9.1-9.9 15.9-19.4 15.9H181.9c-9.6 0-17.4-6.8-19.4-15.9l-12.5-57.1c-15.8-6.5-30.6-15.1-44-25.4L44.9 459.4c-8.8 2.8-18.6 .3-24.5-6.8c-8.1-9.8-15.5-20.2-22.1-31.2l-4.7-8.1c-6.1-11-11.4-22.4-15.8-34.3c-3.2-8.7-.5-18.4 6.4-24.6l43.3-39.4C64.6 273.1 64 264.6 64 256s.6-17.1 1.7-25.4L22.4 191.2c-6.9-6.2-9.6-15.9-6.4-24.6c4.4-11.9 9.7-23.3 15.8-34.3l4.7-8.1c6.6-11 14-21.4 22.1-31.2c5.9-7.2 15.7-9.6 24.5-6.8l55.7 17.7c13.4-10.3 28.2-18.9 44-25.4l12.5-57.1c2-9.1 9.9-15.9 19.4-15.9h148.2c9.6 0 17.4 6.8 19.4 15.9l12.5 57.1c15.8 6.5 30.6 15.1 44 25.4l55.7-17.7c8.8-2.8 18.6-.3 24.5 6.8c8.1 9.8 15.5 20.2 22.1 31.2l4.7 8.1c6.1 11 11.4 22.4 15.8 34.3zM256 336a80 80 0 1 0 0-160 80 80 0 1 0 0 160z"/></svg>
+                    </button>
+                </div>
+            </div>
+            
+            <h1 data-translate-key="mainTitle">Temporizador Pomodoro</h1>
+            
+            <div class="modes" id="modes">
+                <button class="mode-button active" data-mode="pomodoro" data-translate-key="modePomodoro">Pomodoro</button>
+                <button class="mode-button" data-mode="shortBreak" data-translate-key="modeShortBreak">Descanso Corto</button>
+                <button class="mode-button" data-mode="longBreak" data-translate-key="modeLongBreak">Descanso Largo</button>
+            </div>
+
+            <div class="timer" id="timer">25:00</div>
+
+            <div class="controls">
+                <button class="control-button" id="start-pause-button" data-translate-key="startButton">Iniciar</button>
+                <button class="control-button" id="reset-button" data-translate-key="resetButton">Reiniciar</button>
+            </div>
+        </main>
+
+        <section class="tasks-container" id="tasks-container">
+            <h2 data-translate-key="tasksTitle">Tareas</h2>
+            <ul id="task-list"></ul>
+            <form id="new-task-form">
+                <input type="text" id="new-task-input" data-translate-placeholder="newTaskPlaceholder" placeholder="Añadir nueva tarea...">
+                <button type="submit" id="add-task-button" data-translate-key="addTaskButton">Añadir</button>
+            </form>
+            <div class="task-io">
+                <button id="import-tasks-button" data-translate-key="importButton">Importar</button>
+                <input type="file" id="import-file-input" accept=".json, .xml">
+                <button id="export-json-button" data-translate-key="exportJsonButton">Exportar JSON</button>
+                <button id="export-xml-button" data-translate-key="exportXmlButton">Exportar XML</button>
+            </div>
+        </section>
+    </div>
+
+    <div class="modal-overlay" id="settings-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 data-translate-key="settingsTitle">Configuración</h2>
+                <button class="close-button" id="close-modal-button">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="time-presets" data-translate-key="presetsLabel">Presets</label>
+                    <select id="time-presets">
+                        <option value="default" data-translate-key="presetDefault">Default (25/5/15)</option>
+                        <option value="short" data-translate-key="presetShort">Corto (15/5/10)</option>
+                        <option value="long" data-translate-key="presetLong">Largo (50/10/30)</option>
+                    </select>
+                </div>
+                <hr>
+                <div class="form-group">
+                    <label for="pomodoro-time" data-translate-key="pomodoroLabel">Pomodoro (min)</label>
+                    <input type="number" id="pomodoro-time" min="1">
+                </div>
+                <div class="form-group">
+                    <label for="short-break-time" data-translate-key="shortBreakLabel">Descanso corto (min)</label>
+                    <input type="number" id="short-break-time" min="1">
+                </div>
+                <div class="form-group">
+                    <label for="long-break-time" data-translate-key="longBreakLabel">Descanso largo (min)</label>
+                    <input type="number" id="long-break-time" min="1">
+                </div>
+                <div class="form-group">
+                    <label for="long-break-interval" data-translate-key="longBreakIntervalLabel">Intervalo descanso largo</label>
+                    <input type="number" id="long-break-interval" min="1">
+                </div>
+                 <div class="form-group">
+                    <label for="sound-select" data-translate-key="soundLabel">Sonido de Alerta</label>
+                    <select id="sound-select">
+                        <option value="beep" data-translate-key="soundBeep">Beep</option>
+                        <option value="bell" data-translate-key="soundBell">Campana</option>
+                        <option value="digital" data-translate-key="soundDigital">Digital</option>
+                        <option value="mute" data-translate-key="soundMute">Silencio</option>
+                    </select>
+                </div>
+                <hr>
+                <div class="form-group">
+                    <label for="auto-start-breaks" data-translate-key="autoStartBreaksLabel">Iniciar descansos auto.</label>
+                    <input type="checkbox" id="auto-start-breaks">
+                </div>
+                <div class="form-group">
+                    <label for="auto-start-pomodoros" data-translate-key="autoStartPomodorosLabel">Iniciar pomodoros auto.</label>
+                    <input type="checkbox" id="auto-start-pomodoros">
+                </div>
+                <hr>
+                 <div class="form-group">
+                    <label for="theme-select" data-translate-key="themeLabel">Tema</label>
+                    <select id="theme-select">
+                        <option value="light" data-translate-key="themeLight">Claro</option>
+                        <option value="dark" data-translate-key="themeDark">Oscuro</option>
+                        <option value="forest" data-translate-key="themeForest">Bosque</option>
+                        <option value="ocean" data-translate-key="themeOcean">Océano</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="show-clock" data-translate-key="showClockLabel">Mostrar reloj</label>
+                    <input type="checkbox" id="show-clock">
+                </div>
+                 <div class="form-group">
+                    <label data-translate-key="notificationsLabel">Notificaciones</label>
+                    <button id="enable-notifications-button" class="action-button" data-translate-key="enableButton">Activar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lógica de JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const translations = {
+                es: {
+                    appTitle: "Temporizador Pomodoro", mainTitle: "Temporizador Pomodoro", modePomodoro: "Pomodoro", modeShortBreak: "Descanso Corto", modeLongBreak: "Descanso Largo", startButton: "Iniciar", pauseButton: "Pausar", resetButton: "Reiniciar", tasksTitle: "Tareas", newTaskPlaceholder: "Añadir nueva tarea...", addTaskButton: "Añadir", importButton: "Importar", exportJsonButton: "Exportar JSON", exportXmlButton: "Exportar XML", settingsTitle: "Configuración", presetsLabel: "Presets", presetDefault: "Default (25/5/15)", presetShort: "Corto (15/5/10)", presetLong: "Largo (50/10/30)", pomodoroLabel: "Pomodoro (min)", shortBreakLabel: "Descanso corto (min)", longBreakLabel: "Descanso largo (min)", longBreakIntervalLabel: "Intervalo descanso largo", soundLabel: "Sonido de Alerta", soundBeep: "Beep", soundBell: "Campana", soundDigital: "Digital", soundMute: "Silencio", autoStartBreaksLabel: "Iniciar descansos auto.", autoStartPomodorosLabel: "Iniciar pomodoros auto.", themeLabel: "Tema", themeLight: "Claro", themeDark: "Oscuro", themeForest: "Bosque", themeOcean: "Océano", showClockLabel: "Mostrar reloj", notificationsLabel: "Notificaciones", enableButton: "Activar", notificationsEnabled: "Activadas", notificationsDenied: "Bloqueadas", notificationsNotSupported: "No Soportado", notificationPomodoroEnd: "¡Pomodoro terminado!", notificationPomodoroEndBody: "Es hora de un descanso.", notificationBreakEnd: "¡Descanso terminado!", notificationBreakEndBody: "¡A concentrarse de nuevo!", notificationPomodoroStart: "¡Pomodoro iniciado!", notificationPomodoroStartBody: "¡Hora de concentrarse por {minutes} minutos!", notificationBreakStart: "¡Descanso comenzado!", notificationBreakStartBody: "Relájate durante los próximos {minutes} minutos.", detachWindowAria: "Desacoplar ventana", showTasksAria: "Mostrar tareas", openSettingsAria: "Abrir configuración",
+                },
+                en: {
+                    appTitle: "Pomodoro Timer", mainTitle: "Pomodoro Timer", modePomodoro: "Pomodoro", modeShortBreak: "Short Break", modeLongBreak: "Long Break", startButton: "Start", pauseButton: "Pause", resetButton: "Reset", tasksTitle: "Tasks", newTaskPlaceholder: "Add a new task...", addTaskButton: "Add", importButton: "Import", exportJsonButton: "Export JSON", exportXmlButton: "Export XML", settingsTitle: "Settings", presetsLabel: "Presets", presetDefault: "Default (25/5/15)", presetShort: "Short (15/5/10)", presetLong: "Long (50/10/30)", pomodoroLabel: "Pomodoro (min)", shortBreakLabel: "Short break (min)", longBreakLabel: "Long break (min)", longBreakIntervalLabel: "Long break interval", soundLabel: "Alert Sound", soundBeep: "Beep", soundBell: "Bell", soundDigital: "Digital", soundMute: "Mute", autoStartBreaksLabel: "Auto start breaks", autoStartPomodorosLabel: "Auto start pomodoros", themeLabel: "Theme", themeLight: "Light", themeDark: "Dark", themeForest: "Forest", themeOcean: "Ocean", showClockLabel: "Show clock", notificationsLabel: "Notifications", enableButton: "Enable", notificationsEnabled: "Enabled", notificationsDenied: "Denied", notificationsNotSupported: "Not Supported", notificationPomodoroEnd: "Pomodoro finished!", notificationPomodoroEndBody: "Time for a break.", notificationBreakEnd: "Break finished!", notificationBreakEndBody: "Time to focus again!", notificationPomodoroStart: "Pomodoro Started!", notificationPomodoroStartBody: "Time to focus for {minutes} minutes!", notificationBreakStart: "Break Started!", notificationBreakStartBody: "Relax for the next {minutes} minutes.", detachWindowAria: "Detach window", showTasksAria: "Show tasks", openSettingsAria: "Open settings",
+                }
+            };
+            
+            const dom = {
+                htmlLang: document.getElementById('html-lang'),
+                timer: document.getElementById('timer'),
+                startPause: document.getElementById('start-pause-button'),
+                reset: document.getElementById('reset-button'),
+                modes: document.getElementById('modes'),
+                clock: document.getElementById('clock'),
+                settings: {
+                    button: document.getElementById('settings-button'), modal: document.getElementById('settings-modal'), close: document.getElementById('close-modal-button'), presets: document.getElementById('time-presets'), pomodoro: document.getElementById('pomodoro-time'), short: document.getElementById('short-break-time'), long: document.getElementById('long-break-time'), interval: document.getElementById('long-break-interval'), sound: document.getElementById('sound-select'), autoBreaks: document.getElementById('auto-start-breaks'), autoPomodoros: document.getElementById('auto-start-pomodoros'), theme: document.getElementById('theme-select'), showClock: document.getElementById('show-clock'), notifications: document.getElementById('enable-notifications-button'),
+                },
+                tasks: {
+                    button: document.getElementById('tasks-button'), container: document.getElementById('tasks-container'), list: document.getElementById('task-list'), form: document.getElementById('new-task-form'), input: document.getElementById('new-task-input'), importBtn: document.getElementById('import-tasks-button'), importFile: document.getElementById('import-file-input'), exportJson: document.getElementById('export-json-button'), exportXml: document.getElementById('export-xml-button'),
+                },
+                langSelect: document.getElementById('language-select'),
+                detach: document.getElementById('detach-button'),
+            };
+
+            const presets = {
+                default: { pomodoro: 25, shortBreak: 5, longBreak: 15 }, short: { pomodoro: 15, shortBreak: 5, longBreak: 10 }, long: { pomodoro: 50, shortBreak: 10, longBreak: 30 }
+            };
+
+            let settings = {
+                times: { ...presets.default }, autoStartBreaks: false, autoStartPomodoros: false, longBreakInterval: 4, showClock: false, sound: 'beep', theme: 'light', lang: 'es'
+            };
+            
+            let tasks = [], timerInterval = null, clockInterval = null, isRunning = false, pomodoroCount = 0, currentMode = 'pomodoro', minutes, seconds;
+
+            function setLanguage(lang) {
+                settings.lang = lang;
+                dom.htmlLang.lang = lang;
+                document.querySelectorAll('[data-translate-key]').forEach(el => el.textContent = translations[lang][el.dataset.translateKey] || el.textContent);
+                document.querySelectorAll('[data-translate-placeholder]').forEach(el => el.placeholder = translations[lang][el.dataset.translatePlaceholder] || el.placeholder);
+                document.querySelectorAll('[data-translate-aria]').forEach(el => el.setAttribute('aria-label', translations[lang][el.dataset.translateAria] || el.getAttribute('aria-label')));
+                updateNotificationButtonStatus();
+            }
+            
+            function updateDisplay() {
+                minutes = minutes < 0 ? 0 : minutes; seconds = seconds < 0 ? 0 : seconds;
+                const timeString = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+                dom.timer.textContent = timeString;
+                const modeName = dom.modes.querySelector(`[data-mode=${currentMode}]`).textContent;
+                document.title = `${timeString} - ${modeName}`;
+            }
+
+            function switchMode(mode, shouldReset = true) {
+                currentMode = mode;
+                document.querySelectorAll('.mode-button').forEach(button => button.classList.toggle('active', button.dataset.mode === mode));
+                document.body.className = `${mode.replace('B','-b')}-active`;
+                if (shouldReset) resetTimer();
+            }
+
+            function handleTimerEnd() {
+                clearInterval(timerInterval);
+                isRunning = false;
+                dom.startPause.textContent = translations[settings.lang].startButton;
+                playSound();
+
+                let endTitle, endBody, nextMode, autoStart;
+                if (currentMode === 'pomodoro') {
+                    pomodoroCount++;
+                    endTitle = translations[settings.lang].notificationPomodoroEnd;
+                    endBody = translations[settings.lang].notificationPomodoroEndBody;
+                    nextMode = (pomodoroCount % settings.longBreakInterval === 0) ? 'longBreak' : 'shortBreak';
+                    autoStart = settings.autoStartBreaks;
+                } else {
+                    endTitle = translations[settings.lang].notificationBreakEnd;
+                    endBody = translations[settings.lang].notificationBreakEndBody;
+                    nextMode = 'pomodoro';
+                    autoStart = settings.autoStartPomodoros;
+                }
+                showNotification(endTitle, endBody);
+                switchMode(nextMode);
+
+                if (autoStart) {
+                    let startTitle, startBody;
+                    const nextDuration = settings.times[nextMode];
+                    if (nextMode === 'pomodoro') {
+                        startTitle = translations[settings.lang].notificationPomodoroStart;
+                        startBody = translations[settings.lang].notificationPomodoroStartBody.replace('{minutes}', nextDuration);
+                    } else {
+                        startTitle = translations[settings.lang].notificationBreakStart;
+                        startBody = translations[settings.lang].notificationBreakStartBody.replace('{minutes}', nextDuration);
+                    }
+                    showNotification(startTitle, startBody);
+                    startTimer();
+                }
+            }
+
+            function startTimer() {
+                if (isRunning) return;
+                isRunning = true;
+                dom.startPause.textContent = translations[settings.lang].pauseButton;
+                timerInterval = setInterval(() => {
+                    if (seconds === 0) {
+                        if (minutes === 0) { handleTimerEnd(); return; }
+                        minutes--; seconds = 59;
+                    } else { seconds--; }
+                    updateDisplay();
+                }, 1000);
+            }
+
+            function pauseTimer() {
+                isRunning = false;
+                dom.startPause.textContent = translations[settings.lang].startButton;
+                clearInterval(timerInterval);
+            }
+
+            function resetTimer() {
+                pauseTimer();
+                minutes = settings.times[currentMode];
+                seconds = 0;
+                updateDisplay();
+            }
+
+            function playSound() {
+                if (settings.sound === 'mute') return;
+                try {
+                    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    const oscillator = audioContext.createOscillator(), gainNode = audioContext.createGain();
+                    oscillator.connect(gainNode); gainNode.connect(audioContext.destination);
+                    const soundProfiles = { beep: { type: 'sine', freq: 880, dur: 0.5 }, bell: { type: 'triangle', freq: 1200, dur: 0.8 }, digital: { type: 'square', freq: 1000, dur: 0.3 } };
+                    const profile = soundProfiles[settings.sound];
+                    oscillator.type = profile.type;
+                    oscillator.frequency.setValueAtTime(profile.freq, audioContext.currentTime);
+                    gainNode.gain.setValueAtTime(0.5, audioContext.currentTime);
+                    oscillator.start();
+                    oscillator.stop(audioContext.currentTime + profile.dur);
+                } catch (e) { console.error("Could not play sound.", e); }
+            }
+            
+            function updateNotificationButtonStatus() {
+                if (!('Notification' in window)) {
+                    dom.settings.notifications.textContent = translations[settings.lang].notificationsNotSupported;
+                    dom.settings.notifications.disabled = true;
+                    return;
+                }
+                switch(Notification.permission) {
+                    case 'granted':
+                        dom.settings.notifications.textContent = translations[settings.lang].notificationsEnabled;
+                        dom.settings.notifications.disabled = true;
+                        break;
+                    case 'denied':
+                        dom.settings.notifications.textContent = translations[settings.lang].notificationsDenied;
+                        dom.settings.notifications.disabled = true;
+                        break;
+                    default:
+                        dom.settings.notifications.textContent = translations[settings.lang].enableButton;
+                        dom.settings.notifications.disabled = false;
+                }
+            }
+            
+            function requestNotificationPermission() {
+                if ('Notification' in window) {
+                    Notification.requestPermission().then(permission => {
+                        updateNotificationButtonStatus();
+                    });
+                }
+            }
+            
+            function showNotification(title, body) {
+                if ('Notification' in window && Notification.permission === 'granted') {
+                    new Notification(title, { body: body, icon: 'https://img.icons8.com/plasticine/100/tomato.png' });
+                }
+            }
+
+            function renderTasks() {
+                dom.tasks.list.innerHTML = '';
+                tasks.forEach((task, index) => {
+                    const li = document.createElement('li');
+                    li.className = task.completed ? 'completed' : '';
+                    li.innerHTML = `<input type="checkbox" id="task-${index}" ${task.completed ? 'checked' : ''}><label for="task-${index}">${task.text}</label><button class="delete-task">&times;</button>`;
+                    li.querySelector('input').addEventListener('change', () => toggleTask(index));
+                    li.querySelector('.delete-task').addEventListener('click', () => deleteTask(index));
+                    dom.tasks.list.appendChild(li);
+                });
+            }
+            function addTask(text) { tasks.push({ text, completed: false }); renderTasks(); saveState(); }
+            function toggleTask(index) { tasks[index].completed = !tasks[index].completed; renderTasks(); saveState(); }
+            function deleteTask(index) { tasks.splice(index, 1); renderTasks(); saveState(); }
+
+            function exportTasks(format) {
+                if (tasks.length === 0) return;
+                let data, mimeType, filename;
+                if (format === 'json') {
+                    data = JSON.stringify(tasks, null, 2); mimeType = 'application/json'; filename = 'tasks.json';
+                } else {
+                    const tasksXml = tasks.map(t => `<task completed="${t.completed}"><text>${t.text}</text></task>`).join('');
+                    data = `<tasks>${tasksXml}</tasks>`; mimeType = 'application/xml'; filename = 'tasks.xml';
+                }
+                const blob = new Blob([data], { type: mimeType });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url; a.download = filename; a.click();
+                URL.revokeObjectURL(url);
+            }
+            function importTasks(file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    try {
+                        const content = e.target.result;
+                        if (file.type === 'application/json') { tasks = JSON.parse(content); }
+                        else if (file.type === 'application/xml') {
+                            const parser = new DOMParser();
+                            const xmlDoc = parser.parseFromString(content, "text/xml");
+                            tasks = Array.from(xmlDoc.getElementsByTagName('task')).map(node => ({ text: node.querySelector('text').textContent, completed: node.getAttribute('completed') === 'true' }));
+                        }
+                        renderTasks(); saveState();
+                    } catch (err) { console.error('Error importing file:', err); }
+                };
+                reader.readAsText(file);
+            }
+
+            function updateClock() { dom.clock.textContent = new Date().toLocaleTimeString(settings.lang); }
+            function applyTheme(theme) { document.body.dataset.theme = theme; }
+
+            function updateSettingsFromUI() {
+                settings.times.pomodoro = parseInt(dom.settings.pomodoro.value); settings.times.shortBreak = parseInt(dom.settings.short.value); settings.times.longBreak = parseInt(dom.settings.long.value); settings.longBreakInterval = parseInt(dom.settings.interval.value); settings.autoStartBreaks = dom.settings.autoBreaks.checked; settings.autoStartPomodoros = dom.settings.autoPomodoros.checked; settings.showClock = dom.settings.showClock.checked; settings.sound = dom.settings.sound.value; settings.theme = dom.settings.theme.value; settings.lang = dom.langSelect.value;
+            }
+            function updateUIFromSettings() {
+                dom.settings.pomodoro.value = settings.times.pomodoro; dom.settings.short.value = settings.times.shortBreak; dom.settings.long.value = settings.times.longBreak; dom.settings.interval.value = settings.longBreakInterval; dom.settings.autoBreaks.checked = settings.autoStartBreaks; dom.settings.autoPomodoros.checked = settings.autoStartPomodoros; dom.settings.showClock.checked = settings.showClock; dom.settings.sound.value = settings.sound; dom.settings.theme.value = settings.theme; dom.langSelect.value = settings.lang;
+            }
+            function applySettings() {
+                dom.clock.classList.toggle('visible', settings.showClock);
+                if (settings.showClock && !clockInterval) { updateClock(); clockInterval = setInterval(updateClock, 1000); }
+                else if (!settings.showClock && clockInterval) { clearInterval(clockInterval); clockInterval = null; }
+                if (!isRunning) switchMode(currentMode);
+                setLanguage(settings.lang);
+            }
+
+            function saveState() { localStorage.setItem('pomodoroState', JSON.stringify({ settings, tasks, pomodoroCount })); }
+            function loadState() {
+                const savedState = localStorage.getItem('pomodoroState');
+                if (savedState) {
+                    const state = JSON.parse(savedState);
+                    settings = { ...settings, ...state.settings }; tasks = state.tasks || []; pomodoroCount = state.pomodoroCount || 0;
+                }
+                updateUIFromSettings(); applySettings(); applyTheme(settings.theme); renderTasks(); updateNotificationButtonStatus();
+            }
+            function hideSettingsModal() {
+                dom.settings.modal.classList.remove('visible');
+                updateSettingsFromUI(); saveState(); applySettings(); applyTheme(settings.theme);
+            }
+
+            dom.startPause.addEventListener('click', () => isRunning ? pauseTimer() : startTimer());
+            dom.reset.addEventListener('click', resetTimer);
+            dom.modes.addEventListener('click', (e) => { if (e.target.dataset.mode) switchMode(e.target.dataset.mode); });
+            dom.settings.button.addEventListener('click', () => dom.settings.modal.classList.add('visible'));
+            dom.settings.close.addEventListener('click', hideSettingsModal);
+            dom.settings.presets.addEventListener('change', () => {
+                const preset = presets[dom.settings.presets.value];
+                if(preset) { settings.times = {...preset}; updateUIFromSettings(); }
+            });
+            dom.tasks.button.addEventListener('click', () => dom.tasks.container.style.display = dom.tasks.container.style.display === 'block' ? 'none' : 'block');
+            dom.tasks.form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const text = dom.tasks.input.value.trim();
+                if (text) { addTask(text); dom.tasks.input.value = ''; }
+            });
+            dom.tasks.importBtn.addEventListener('click', () => dom.tasks.importFile.click());
+            dom.tasks.importFile.addEventListener('change', (e) => importTasks(e.target.files[0]));
+            dom.tasks.exportJson.addEventListener('click', () => exportTasks('json'));
+            dom.tasks.exportXml.addEventListener('click', () => exportTasks('xml'));
+            dom.langSelect.addEventListener('change', (e) => { setLanguage(e.target.value); saveState(); });
+            dom.detach.addEventListener('click', () => window.open(window.location.href, 'PomodoroPopup', 'width=500,height=650,resizable=yes'));
+            dom.settings.notifications.addEventListener('click', requestNotificationPermission);
+            
+            loadState();
+        });
+    </script>
+</body>
+</html>
+
