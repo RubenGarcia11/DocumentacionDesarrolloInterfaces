@@ -3,12 +3,112 @@
     <title>Desarrollo de interfaces</title>
     <link href="https://RubenGarcia11.github.io/DocumentacionDesarrolloInterfaces/feed.xml" rel="self" />
     <link href="https://RubenGarcia11.github.io/DocumentacionDesarrolloInterfaces" />
-    <updated>2025-10-17T14:50:14+02:00</updated>
+    <updated>2025-11-04T01:38:53+01:00</updated>
     <author>
         <name>Rubén García</name>
     </author>
     <id>https://RubenGarcia11.github.io/DocumentacionDesarrolloInterfaces</id>
 
+    <entry>
+        <title>Reproductor Multimedia Local</title>
+        <author>
+            <name>Rubén García</name>
+        </author>
+        <link href="https://RubenGarcia11.github.io/DocumentacionDesarrolloInterfaces/reproductor-multimedia-local.html"/>
+        <id>https://RubenGarcia11.github.io/DocumentacionDesarrolloInterfaces/reproductor-multimedia-local.html</id>
+
+        <updated>2025-11-04T00:52:56+01:00</updated>
+            <summary>
+                <![CDATA[
+                    Introduccion El proyecto consiste en el desarrollo de un reproductor multimedia local con integración de calendario, cuyo objetivo principal es ofrecer una herramienta versátil para la gestión y reproducción de archivos de audio y video, junto con la organización de eventos o recordatorios relacionados. La&hellip;
+                ]]>
+            </summary>
+        <content type="html">
+            <![CDATA[
+                <h3>Introduccion</h3>
+<p>El proyecto consiste en el desarrollo de un <strong data-start="172" data-end="234">reproductor multimedia local con integración de calendario</strong>, cuyo objetivo principal es ofrecer una herramienta versátil para la <strong data-start="304" data-end="359">gestión y reproducción de archivos de audio y video</strong>, junto con la <strong data-start="374" data-end="417">organización de eventos o recordatorios</strong> relacionados. La aplicación busca combinar <strong data-start="461" data-end="497">funcionalidad y diseño intuitivo</strong>, permitiendo al usuario reproducir su contenido multimedia de forma sencilla, al tiempo que puede <strong data-start="596" data-end="649">planificar actividades o programar reproducciones</strong> según fechas específicas. Durante su desarrollo se aplicaron los principios de <strong data-start="729" data-end="797">interfaz de usuario, usabilidad y experiencia de usuario (UX/UI)</strong>, empleando tecnologías web estándar como <strong data-start="839" data-end="874">HTML5, CSS y JavaScript vanilla</strong>.</p>
+<h3>Funcionalidades</h3>
+<p data-start="152" data-end="381">El reproductor multimedia con calendario incorpora una serie de funcionalidades diseñadas para mejorar la experiencia del usuario y optimizar la gestión del contenido local. Entre las características más relevantes se incluyen:</p>
+<ul data-start="383" data-end="1333">
+<li data-start="383" data-end="523">
+<p data-start="385" data-end="523"><strong data-start="385" data-end="421">Reproducción de archivos locales</strong>, permitiendo al usuario seleccionar y reproducir música o videos directamente desde su dispositivo.</p>
+</li>
+<li data-start="524" data-end="642">
+<p data-start="526" data-end="642"><strong data-start="526" data-end="563">Controles básicos de reproducción</strong>, como reproducir, pausar, detener, avanzar, retroceder y ajustar el volumen.</p>
+</li>
+<li data-start="643" data-end="753">
+<p data-start="645" data-end="753"><strong data-start="645" data-end="679">Lista de reproducción dinámica</strong>, que permite agregar, eliminar o reordenar archivos de manera sencilla.</p>
+</li>
+<li data-start="754" data-end="918">
+<p data-start="756" data-end="918"><strong data-start="756" data-end="786">Integración con calendario</strong>, posibilitando <strong data-start="802" data-end="837">asociar eventos o recordatorios</strong> a fechas específicas, e incluso vincularlos con archivos multimedia concretos.</p>
+</li>
+<li data-start="919" data-end="1051">
+<p data-start="921" data-end="1051"><strong data-start="921" data-end="955">Interfaz intuitiva y adaptable</strong>, diseñada siguiendo principios de usabilidad y accesibilidad, con un diseño limpio y moderno.</p>
+</li>
+<li data-start="1052" data-end="1175">
+<p data-start="1054" data-end="1175"><strong data-start="1054" data-end="1079">Temas personalizables</strong>, incluyendo la opción de <strong data-start="1105" data-end="1120">modo oscuro</strong> para mejorar la visualización en distintos entornos.</p>
+</li>
+<li data-start="1176" data-end="1333">
+<p data-start="1178" data-end="1333"><strong data-start="1178" data-end="1203">Persistencia de datos</strong>, de modo que las listas de reproducción y los eventos del calendario se mantengan entre sesiones mediante almacenamiento local.</p>
+</li>
+</ul>
+<p data-start="1335" data-end="1505">Esta combinación de funciones busca ofrecer una aplicación <strong data-start="1394" data-end="1417">completa y práctica</strong>, que unifique el entretenimiento y la organización personal en una única herramienta.</p>
+<h3>Inteligencia Artificial Usada</h3>
+<p data-start="209" data-end="562">Para asistir en el proceso de diseño y desarrollo de la aplicación se empleó <strong data-start="286" data-end="304">Gemini 2.5 Pro</strong>, un modelo avanzado de inteligencia artificial desarrollado por Google. Esta herramienta se utilizó como <strong data-start="410" data-end="456">asistente de programación y apoyo creativo</strong>, permitiendo generar código, optimizar estructuras y proponer soluciones de diseño de manera eficiente.</p>
+<p data-start="564" data-end="1034">Entre sus principales beneficios destacan su <strong data-start="609" data-end="662">capacidad para comprender instrucciones complejas</strong>, su <strong data-start="667" data-end="709">adaptabilidad al contexto del proyecto</strong>, y su <strong data-start="716" data-end="768">habilidad para generar código limpio y funcional</strong> en distintos lenguajes, incluyendo <strong data-start="804" data-end="839">HTML5, CSS y JavaScript vanilla</strong>. Gracias a estas características, Gemini 2.5 Pro se convirtió en una herramienta fundamental para <strong data-start="938" data-end="964">agilizar el desarrollo</strong>, <strong data-start="966" data-end="985">reducir errores</strong> y <strong data-start="988" data-end="1031">mejorar la calidad final de la interfaz</strong>.</p>
+<h3 data-start="564" data-end="1034">Prompt Inicial</h3>
+<blockquote>
+<p data-start="194" data-end="401">Actúa como un desarrollador web con amplia experiencia en el diseño y desarrollo de aplicaciones e interfaces, aplicando buenas prácticas de programación, accesibilidad, usabilidad y diseño visual.</p>
+<p data-start="403" data-end="645">Desarrolla una aplicación web de reproductor multimedia local con integración de calendario, utilizando HTML5, CSS y JavaScript puro (vanilla JavaScript). No utilices frameworks ni librerías externas, ni para JavaScript ni para CSS.</p>
+<p data-start="647" data-end="707">La aplicación debe incluir las siguientes características:</p>
+<ul data-start="708" data-end="1474">
+<li data-start="708" data-end="776">
+<p data-start="710" data-end="776">Reproducción de archivos multimedia locales (audio y video).</p>
+</li>
+<li data-start="777" data-end="890">
+<p data-start="779" data-end="890">Controles básicos de reproducción: reproducir, pausar, detener, avanzar, retroceder y ajustar el volumen.</p>
+</li>
+<li data-start="891" data-end="988">
+<p data-start="893" data-end="988">Lista de reproducción dinámica, con opciones para agregar, eliminar y reordenar archivos.</p>
+</li>
+<li data-start="989" data-end="1108">
+<p data-start="991" data-end="1108">Integración con un calendario, que permita crear eventos o recordatorios y vincularlos con archivos multimedia.</p>
+</li>
+<li data-start="1109" data-end="1167">
+<p data-start="1111" data-end="1167">Temas personalizables, incluyendo modo oscuro.</p>
+</li>
+<li data-start="1168" data-end="1289">
+<p data-start="1170" data-end="1289">Persistencia de datos mediante almacenamiento local, conservando listas de reproducción y eventos entre sesiones.</p>
+</li>
+<li data-start="1290" data-end="1359">
+<p data-start="1292" data-end="1359">Diseño responsive, adaptable a distintos tamaños de pantalla.</p>
+</li>
+<li data-start="1360" data-end="1474">
+<p data-start="1362" data-end="1474">Interfaz accesible y usable, con elementos bien contrastados, etiquetas semánticas y navegación intuitiva.</p>
+</li>
+</ul>
+<p data-start="1476" data-end="1491">Asegúrate de:</p>
+<ul data-start="1492" data-end="1815">
+<li data-start="1492" data-end="1591">
+<p data-start="1494" data-end="1591">Mantener un código limpio, modular y semántico, facilitando su comprensión y mantenimiento.</p>
+</li>
+<li data-start="1592" data-end="1741">
+<p data-start="1594" data-end="1741">Respetar una estructura de proyecto clara, separando correctamente la lógica (JavaScript), el estilo (CSS) y el contenido (HTML).</p>
+</li>
+<li data-start="1742" data-end="1815">
+<p data-start="1744" data-end="1815">Comentar el código de forma adecuada para explicar su funcionamiento.</p>
+</li>
+</ul>
+</blockquote>
+<h3>Resultado:</h3>
+<figure class="post__image"><img loading="lazy"  src="https://RubenGarcia11.github.io/DocumentacionDesarrolloInterfaces/media/posts/2/Captura-de-pantalla-2025-11-04-a-las-1.14.25.png" alt="" width="1920" height="1080" sizes="(max-width: 1920px) 100vw, 1920px" srcset="https://RubenGarcia11.github.io/DocumentacionDesarrolloInterfaces/media/posts/2/responsive/Captura-de-pantalla-2025-11-04-a-las-1.14.25-xs.png 640w ,https://RubenGarcia11.github.io/DocumentacionDesarrolloInterfaces/media/posts/2/responsive/Captura-de-pantalla-2025-11-04-a-las-1.14.25-sm.png 768w ,https://RubenGarcia11.github.io/DocumentacionDesarrolloInterfaces/media/posts/2/responsive/Captura-de-pantalla-2025-11-04-a-las-1.14.25-md.png 1024w ,https://RubenGarcia11.github.io/DocumentacionDesarrolloInterfaces/media/posts/2/responsive/Captura-de-pantalla-2025-11-04-a-las-1.14.25-lg.png 1366w ,https://RubenGarcia11.github.io/DocumentacionDesarrolloInterfaces/media/posts/2/responsive/Captura-de-pantalla-2025-11-04-a-las-1.14.25-xl.png 1600w ,https://RubenGarcia11.github.io/DocumentacionDesarrolloInterfaces/media/posts/2/responsive/Captura-de-pantalla-2025-11-04-a-las-1.14.25-2xl.png 1920w"></figure>
+<blockquote>
+<p>La estética de la aplicación debe de ser mas amigable, las esquinas deben de ser mas redondeadas y los colores más llamativos</p>
+</blockquote>
+<figure class="post__image"><img loading="lazy"  src="https://RubenGarcia11.github.io/DocumentacionDesarrolloInterfaces/media/posts/2/Captura-de-pantalla-2025-11-04-a-las-1.38.05.png" alt="" width="1920" height="1080" sizes="(max-width: 1920px) 100vw, 1920px" srcset="https://RubenGarcia11.github.io/DocumentacionDesarrolloInterfaces/media/posts/2/responsive/Captura-de-pantalla-2025-11-04-a-las-1.38.05-xs.png 640w ,https://RubenGarcia11.github.io/DocumentacionDesarrolloInterfaces/media/posts/2/responsive/Captura-de-pantalla-2025-11-04-a-las-1.38.05-sm.png 768w ,https://RubenGarcia11.github.io/DocumentacionDesarrolloInterfaces/media/posts/2/responsive/Captura-de-pantalla-2025-11-04-a-las-1.38.05-md.png 1024w ,https://RubenGarcia11.github.io/DocumentacionDesarrolloInterfaces/media/posts/2/responsive/Captura-de-pantalla-2025-11-04-a-las-1.38.05-lg.png 1366w ,https://RubenGarcia11.github.io/DocumentacionDesarrolloInterfaces/media/posts/2/responsive/Captura-de-pantalla-2025-11-04-a-las-1.38.05-xl.png 1600w ,https://RubenGarcia11.github.io/DocumentacionDesarrolloInterfaces/media/posts/2/responsive/Captura-de-pantalla-2025-11-04-a-las-1.38.05-2xl.png 1920w"></figure>
+            ]]>
+        </content>
+    </entry>
     <entry>
         <title>Pomodoro</title>
         <author>
