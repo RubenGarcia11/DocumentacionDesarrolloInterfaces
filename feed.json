@@ -10,6 +10,20 @@
     },
     "items": [
         {
+            "id": "https://RubenGarcia11.github.io/DocumentacionDesarrolloInterfaces/guia-de-iracing.html",
+            "url": "https://RubenGarcia11.github.io/DocumentacionDesarrolloInterfaces/guia-de-iracing.html",
+            "title": "Guia de iRacing",
+            "summary": "Introducción Esta guía ha sido elaborada para ayudar tanto a nuevos pilotos como a usuarios experimentados a mejorar su rendimiento en iRacing, una de las plataformas de simulación de conducción más realistas y exigentes del mundo. A lo largo de esta guía se abordan aspectos&hellip;",
+            "content_html": "<h3 data-start=\"155\" data-end=\"171\">Introducción</h3>\n<p data-start=\"173\" data-end=\"606\">Esta guía ha sido elaborada para ayudar tanto a nuevos pilotos como a usuarios experimentados a mejorar su rendimiento en iRacing, una de las plataformas de simulación de conducción más realistas y exigentes del mundo. A lo largo de esta guía se abordan aspectos clave como la configuración del equipo, técnicas de pilotaje, gestión de carrera y optimización del simulador para conseguir una experiencia más fluida y competitiva.</p>\n<p data-start=\"608\" data-end=\"1157\">Para la creación y estructuración de los contenidos se ha utilizado Gemini 3, un modelo avanzado de inteligencia artificial que destaca por su capacidad para analizar información técnica, generar explicaciones claras y adaptarse al nivel de conocimiento del usuario. Gracias a su precisión y capacidad de razonamiento contextual, Gemini 3 ha servido como una herramienta de apoyo fundamental para organizar la información, simplificar conceptos complejos y garantizar que la guía sea completa, accesible y útil para cualquier piloto virtual.</p>\n<p>Prompt Inicial:</p>\n<blockquote>\n<p>Actua como un desarrollador con experiencia de varios años en el desarrollo de aplicaciones e interfaces web, siguiendo buenas prácticas de diseño, accesibilidad y usabilidad.<br><br> Haz una app guía de como empezar en iracing, habla de las categoría, el rango de corredor etc... en HTML5, CSS y JavaScript puro (vanilla JavaScript) no uses frameworks para JavaScript ni para CSS. <br>Mantener un código limpio, modular y semántico, facilitando su comprensión y mantenimiento.<br>Respetar una estructura de proyecto clara, separando la lógica, el estilo y el contenido.</p>\n</blockquote>\n<figure class=\"post__image\"><img loading=\"lazy\"  src=\"https://RubenGarcia11.github.io/DocumentacionDesarrolloInterfaces/media/posts/3/Captura-de-pantalla-2025-11-20-a-las-0.06.44.png\" alt=\"\" width=\"2880\" height=\"1800\" sizes=\"(max-width: 1920px) 100vw, 1920px\" srcset=\"https://RubenGarcia11.github.io/DocumentacionDesarrolloInterfaces/media/posts/3/responsive/Captura-de-pantalla-2025-11-20-a-las-0.06.44-xs.png 640w ,https://RubenGarcia11.github.io/DocumentacionDesarrolloInterfaces/media/posts/3/responsive/Captura-de-pantalla-2025-11-20-a-las-0.06.44-sm.png 768w ,https://RubenGarcia11.github.io/DocumentacionDesarrolloInterfaces/media/posts/3/responsive/Captura-de-pantalla-2025-11-20-a-las-0.06.44-md.png 1024w ,https://RubenGarcia11.github.io/DocumentacionDesarrolloInterfaces/media/posts/3/responsive/Captura-de-pantalla-2025-11-20-a-las-0.06.44-lg.png 1366w ,https://RubenGarcia11.github.io/DocumentacionDesarrolloInterfaces/media/posts/3/responsive/Captura-de-pantalla-2025-11-20-a-las-0.06.44-xl.png 1600w ,https://RubenGarcia11.github.io/DocumentacionDesarrolloInterfaces/media/posts/3/responsive/Captura-de-pantalla-2025-11-20-a-las-0.06.44-2xl.png 1920w\"></figure>\n<p> </p>",
+            "author": {
+                "name": "Rubén García"
+            },
+            "tags": [
+            ],
+            "date_published": "2025-11-19T15:58:10+01:00",
+            "date_modified": "2025-11-20T00:10:09+01:00"
+        },
+        {
             "id": "https://RubenGarcia11.github.io/DocumentacionDesarrolloInterfaces/reproductor-multimedia-local.html",
             "url": "https://RubenGarcia11.github.io/DocumentacionDesarrolloInterfaces/reproductor-multimedia-local.html",
             "title": "Reproductor Multimedia Local",
