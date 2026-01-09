@@ -3,12 +3,126 @@
     <title>Desarrollo de interfaces</title>
     <link href="https://RubenGarcia11.github.io/DocumentacionDesarrolloInterfaces/feed.xml" rel="self" />
     <link href="https://RubenGarcia11.github.io/DocumentacionDesarrolloInterfaces" />
-    <updated>2025-12-11T22:15:10+01:00</updated>
+    <updated>2026-01-09T05:43:07+01:00</updated>
     <author>
         <name>Rubén García</name>
     </author>
     <id>https://RubenGarcia11.github.io/DocumentacionDesarrolloInterfaces</id>
 
+    <entry>
+        <title>NovelaVisual</title>
+        <author>
+            <name>Rubén García</name>
+        </author>
+        <link href="https://RubenGarcia11.github.io/DocumentacionDesarrolloInterfaces/novelavisual.html"/>
+        <id>https://RubenGarcia11.github.io/DocumentacionDesarrolloInterfaces/novelavisual.html</id>
+
+        <updated>2026-01-09T05:42:06+01:00</updated>
+            <summary>
+                <![CDATA[
+                    La Mansión Vega: Desarrollo de una Novela Gráfica Interactiva Por Ruben Garcia — 9 de enero de 2026 "El Misterio de la Mansión Vega" es una experiencia narrativa interactiva que combina el estilo visual del cómic noir con mecánicas de juego modernas. Este documento detalla&hellip;
+                ]]>
+            </summary>
+        <content type="html">
+            <![CDATA[
+                <article><header>
+<h1>La Mansión Vega: Desarrollo de una Novela Gráfica Interactiva</h1>
+<p><em>Por Ruben Garcia — 9 de enero de 2026</em></p>
+</header>
+<p>"El Misterio de la Mansión Vega" es una experiencia narrativa interactiva que combina el estilo visual del cómic noir con mecánicas de juego modernas. Este documento detalla las funcionalidades clave, la estructura narrativa y el stack tecnológico utilizado en su desarrollo.</p>
+<figure><img loading="lazy" src="/media/posts/cover-mansion.jpg" alt="Portada de La Mansión Vega" sizes="(max-width: 1920px) 100vw, 1920px" srcset="/media/posts/responsive/cover-mansion-xs.jpg 640w ,/media/posts/responsive/cover-mansion-sm.jpg 768w ,/media/posts/responsive/cover-mansion-md.jpg 1024w ,/media/posts/responsive/cover-mansion-lg.jpg 1366w ,/media/posts/responsive/cover-mansion-xl.jpg 1600w ,/media/posts/responsive/cover-mansion-2xl.jpg 1920w">
+<figcaption>Arte conceptual de la mansión.</figcaption>
+</figure>
+<hr>
+<h2>🌟 Funcionalidades Principales</h2>
+<p>El núcleo del proyecto es un motor de decisiones que permite a los jugadores alterar el curso de la historia de forma dinámica.</p>
+<h3>1. Sistema de Narrativa Ramificada</h3>
+<ul>
+<li><strong>Mecánica:</strong> Toma de decisiones al final de cada escena.</li>
+<li><strong>Consecuencias:</strong> Implementación de rutas divergentes y 4 finales distintos.</li>
+</ul>
+<h3>2. Autenticación Híbrida con Supabase</h3>
+<p>Se implementó un sistema flexible para mejorar la retención de usuarios:</p>
+<ul>
+<li><strong>Modo Invitado:</strong> Persistencia de datos en <code>localStorage</code>, ideal para sesiones rápidas.</li>
+<li><strong>Modo Agente:</strong> Registro formal vía correo/contraseña con sincronización en la nube mediante <strong>Supabase</strong>.</li>
+</ul>
+<h3>3. Sistema de Inventario</h3>
+<p>La recolección de objetos es vital para el progreso, ya que desbloquean opciones narrativas futuras.</p>
+<ul>
+<li><strong>Objetos clave:</strong> Mapa, Llave Maestra, Diario, Antídoto.</li>
+<li><strong>Interfaz:</strong> Barra lateral visual con tooltips informativos.</li>
+</ul>
+<h3>4. Inmersión y Estética</h3>
+<ul>
+<li><strong>Efectos SFX Visuales:</strong> Onomatopeyas animadas (<em>whisper</em>, <em>boom</em>, <em>pulse</em>) mediante CSS puro.</li>
+<li><strong>Estética Noir:</strong> Paneles de cómic con transiciones suaves para mantener el ritmo narrativo.</li>
+</ul>
+<hr>
+<h2>📚 Estructura de la Historia</h2>
+<p>Tras el prólogo, la historia se bifurca en dos caminos principales que determinan el tono de la partida.</p>
+<h3>Prólogo: La Llegada</h3>
+<p>El detective llega al lugar tras una misiva anónima. La primera gran decisión define el estilo de juego:</p>
+<ul>
+<li><strong>Investigar Solo:</strong> Enfoque en sigilo y resolución de puzzles.</li>
+<li><strong>Llamar Refuerzos:</strong> Enfoque en táctica y gestión de recursos del equipo.</li>
+</ul>
+<h3>Rama A: Lobo Solitario</h3>
+<p>Descubrimiento de los secretos más oscuros de la familia Vega en el sótano y laboratorios ocultos. Culmina en un enfrentamiento psicológico.</p>
+<h3>Rama B: Equipo Táctico</h3>
+<p>Gestión de un asedio en la biblioteca y pasadizos. Culmina en un enfrentamiento armado y captura de sospechosos.</p>
+<h3>Los 4 Finales</h3>
+<ol>
+<li><strong>Trágico:</strong> El misterio queda sin resolver.</li>
+<li><strong>Huida:</strong> Supervivencia, pero con interrogantes abiertos.</li>
+<li><strong>Justicia:</strong> La resolución completa del caso.</li>
+<li><strong>Secreto (🌟):</strong> Solo accesible si se encuentran todos los objetos del diario.</li>
+</ol>
+<hr>
+<h2>💻 Stack Tecnológico</h2>
+<p>Tecnologías utilizadas para garantizar rendimiento y compatibilidad:</p>
+<ul>
+<li><strong>Frontend:</strong> HTML5, CSS3 (Custom Variables), Vanilla JavaScript.</li>
+<li><strong>Backend:</strong> Supabase (Auth y Database).</li>
+<li><strong>Hosting:</strong> GitHub Pages.</li>
+</ul>
+<h3>Fragmentos de Código Clave</h3>
+<h4>Configuración de Supabase</h4>
+<pre><code>// js/supabase.js
+try {
+  if (typeof window.supabase === 'undefined') {
+      console.warn('⚠️ Modo Offline activado.');
+      supabase = null;
+  } else {
+    supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  }
+} catch (error) {
+  console.error('Error en backend:', error);
+}</code></pre>
+<h4>Motor de Escenas (JSON)</h4>
+<pre><code>// Estructura de escena en js/story.js
+const STORY = {
+    'prologo': {
+        title: "La Llegada",
+        panels: [
+            { 
+                image: "prologo_misterio", 
+                narration: "La carta no tenía remitente...",
+                sfx: { text: "CRACK!", type: "boom", position: "top-right" }
+            }
+        ],
+        choices: [
+            { text: "Entrar solo", next: "rama_solo_entrada" },
+            { text: "Esperar refuerzos", next: "rama_equipo_inicio" }
+        ]
+    }
+};</code></pre>
+<hr><footer>
+<p><em>Desarrollado por Ruben Garcia - 2026</em></p>
+</footer></article>
+            ]]>
+        </content>
+    </entry>
     <entry>
         <title>Visor de documentación</title>
         <author>
