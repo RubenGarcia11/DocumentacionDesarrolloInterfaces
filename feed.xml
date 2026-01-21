@@ -3,7 +3,7 @@
     <title>Desarrollo de interfaces</title>
     <link href="https://RubenGarcia11.github.io/DocumentacionDesarrolloInterfaces/feed.xml" rel="self" />
     <link href="https://RubenGarcia11.github.io/DocumentacionDesarrolloInterfaces" />
-    <updated>2026-01-21T16:23:50+01:00</updated>
+    <updated>2026-01-21T16:27:58+01:00</updated>
     <author>
         <name>Rubén García</name>
     </author>
@@ -20,52 +20,49 @@
         <updated>2026-01-21T16:19:01+01:00</updated>
             <summary>
                 <![CDATA[
-                    Documentación Técnica: ServerManager Arquitectura, API y Lógica de Negocio ServerManager es una solución integral para la orquestación y monitoreo de servidores Docker. Esta documentación detalla la implementación técnica de sus servicios backend, la API REST y los componentes frontend, incluyendo ejemplos de código de las&hellip;
+                    ServerManager: Documentación Técnica Completa Orquestación Docker, Túneles Ngrok y Automatización vía Telegram ServerManager es una plataforma integral para la gestión de infraestructura contenerizada. Permite administrar servidores SSH, FTP y Web a través de un Dashboard moderno y un Bot de Telegram interactivo, integrando servicios de&hellip;
                 ]]>
             </summary>
         <content type="html">
             <![CDATA[
                 <header class="post-header align-center">
-<h1>Documentación Técnica: ServerManager</h1>
+<h1>ServerManager: Documentación Técnica Completa</h1>
 <div class="post-meta">
-<p>Arquitectura, API y Lógica de Negocio</p>
+<p>Orquestación Docker, Túneles Ngrok y Automatización vía Telegram</p>
 </div>
 </header>
 <div class="post-content">
-<p class="align-center"><img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&amp;logo=docker&amp;logoColor=white" alt="Docker Badge" data-is-external-image="true"> <img loading="lazy" src="https://img.shields.io/badge/Node.js-339933?style=for-the-badge&amp;logo=nodedotjs&amp;logoColor=white" alt="Node.js Badge" data-is-external-image="true"> <img loading="lazy" src="https://img.shields.io/badge/React-61DAFB?style=for-the-badge&amp;logo=react&amp;logoColor=black" alt="React Badge" data-is-external-image="true"></p>
-<p class="lead"><strong>ServerManager</strong> es una solución integral para la orquestación y monitoreo de servidores Docker. Esta documentación detalla la implementación técnica de sus servicios backend, la API REST y los componentes frontend, incluyendo ejemplos de código de las funcionalidades críticas.</p>
+<p class="align-center"><img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&amp;logo=docker&amp;logoColor=white" alt="Docker Badge" data-is-external-image="true"> <img loading="lazy" src="https://img.shields.io/badge/Node.js-339933?style=for-the-badge&amp;logo=nodedotjs&amp;logoColor=white" alt="Node.js Badge" data-is-external-image="true"> <img src="https://img.shields.io/badge/React-61DAFB?style=for-the-badge&amp;logo=react&amp;logoColor=black" alt="React Badge" data-is-external-image="true"> <img loading="lazy" src="https://img.shields.io/badge/Ngrok-1F1E38?style=for-the-badge&amp;logo=ngrok&amp;logoColor=white" alt="Ngrok Badge" data-is-external-image="true"></p>
+<p class="lead"><strong>ServerManager</strong> es una plataforma integral para la gestión de infraestructura contenerizada. Permite administrar servidores SSH, FTP y Web a través de un Dashboard moderno y un Bot de Telegram interactivo, integrando servicios de exposición pública mediante Ngrok.</p>
 <hr><nav class="toc-container">
-<h3>Indice de Contenidos</h3>
+<h3>Índice de Contenidos</h3>
 <ul>
 <li><a href="#arquitectura">Arquitectura del Sistema</a></li>
-<li><a href="#backend-docker">Servicio: Docker Control</a></li>
-<li><a href="#backend-ssh">Servicio: Cliente SSH</a></li>
-<li><a href="#backend-ftp">Servicio: Gestor FTP</a></li>
-<li><a href="#telegram-bot">Lógica del Bot de Telegram</a></li>
-<li><a href="#frontend-logic">Componentes Frontend</a></li>
-<li><a href="#api-endpoints">API Reference</a></li>
+<li><a href="#docker-core">Core: Control de Docker</a></li>
+<li><a href="#ngrok-service">Acceso Remoto: Servicio Ngrok</a></li>
+<li><a href="#ssh-ftp">Protocolos: SSH y FTP</a></li>
+<li><a href="#telegram-bot">Automatización: Bot de Telegram</a></li>
+<li><a href="#frontend">Dashboard &amp; Terminal Web</a></li>
+<li><a href="#api">Referencia API</a></li>
 </ul>
 </nav><hr>
 <section id="arquitectura">
 <h2>🏗️ Arquitectura del Sistema</h2>
-<p>El proyecto sigue una arquitectura de microservicios donde un servidor central (Node.js/Express) actúa como orquestador entre los clientes (Web/Telegram) y los contenedores objetivo.</p>
-<p>El flujo de datos se estructura de la siguiente manera:</p>
+<p>El sistema opera bajo un modelo de microservicios orquestados. El servidor API central gestiona la comunicación entre los clientes (Web/Móvil) y los contenedores objetivo, utilizando túneles seguros para exposición externa.</p>
 <pre><code class="language-plaintext">┌─────────────────────────────────────────────────────────────────────────────┐
 │                              CLIENTE                                        │
 ├─────────────────────┬───────────────────────────────────────────────────────┤
 │   Dashboard Web     │              Bot Telegram                             │
 │   (React + Vite)    │         (node-telegram-bot-api)                       │
-│   Puerto: 80        │                                                       │
 └─────────┬───────────┴──────────────────────────┬────────────────────────────┘
           │                                      │
           ▼                                      ▼
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │                         SERVIDOR API (Node.js/Express)                      │
-│                              Puerto: 3000                                   │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐    │
-│  │ Docker       │  │ SSH Client   │  │ FTP Service  │  │ Web Service  │    │
-│  │ Control      │  │              │  │              │  │              │    │
+│  │ Docker       │  │ SSH Client   │  │ FTP Service  │  │ Ngrok        │    │
+│  │ Control      │  │              │  │              │  │ Service      │    │
 │  └──────────────┘  └──────────────┘  └──────────────┘  └──────────────┘    │
 └─────────────────────────────────────────────────────────────────────────────┘
           │
@@ -76,263 +73,205 @@
 └─────────────────────────────────────────────────────────────────────────────┘</code></pre>
 </section>
 <hr>
-<section id="backend-docker">
-<h2>🐳 Servicio: Docker Control</h2>
-<p>Ubicado en <code>server/services/dockerControl.js</code>, este servicio utiliza la librería <code>dockerode</code> conectada al socket local (<code>/var/run/docker.sock</code>) para manipular contenedores.</p>
-<h3>Filtrado de Contenedores</h3>
-<p>El sistema no muestra todos los contenedores de la máquina host, sino que filtra específicamente aquellos etiquetados como "target", excluyendo la infraestructura del propio dashboard.</p>
-<pre><code class="language-javascript">const listContainers = async () =&gt; {
-    const containers = await docker.listContainers({ all: true });
-    // Filtra solo contenedores target (excluye dashboard-server y dashboard-client)
-    return containers.filter(c =&gt; c.Names.some(n =&gt;
-        n.includes('target') &amp;&amp; !n.includes('dashboard')
-    ));
-};</code></pre>
-<h3>Gestión de Recursos en Tiempo Real</h3>
-<p>Una de las funcionalidades más avanzadas es la capacidad de actualizar "en caliente" los límites de CPU y Memoria RAM. Para la CPU, se realiza una conversión a <code>NanoCpus</code> (1 CPU = 1e9 nanocpus).</p>
+<section id="docker-core">
+<h2>🐳 Core: Control de Docker</h2>
+<p>El servicio principal (<code>server/services/dockerControl.js</code>) interactúa directamente con el socket de Docker. A diferencia de un cliente estándar, este servicio implementa lógica de negocio específica para filtrar y gestionar recursos en caliente.</p>
+<h3>Modificación de Recursos en Tiempo Real</h3>
+<p>El sistema convierte valores humanos (CPUs, MB) a las unidades internas del Kernel de Linux (NanoCpus, Bytes) para aplicar límites sin reiniciar los contenedores.</p>
 <pre><code class="language-javascript">const updateContainerResources = async (name, resources) =&gt; {
     const container = getContainer(name);
     const updateConfig = {};
 
-    // CPU limit usando NanoCpus (1 CPU = 1e9 nanocpus)
+    // Conversión: 1 CPU = 1e9 NanoCpus
     if (resources.cpuLimit !== undefined) {
         updateConfig.NanoCpus = Math.floor(resources.cpuLimit * 1e9);
     }
 
-    // Memory limit (en bytes)
+    // Conversión: MB a Bytes
     if (resources.memoryLimit !== undefined) {
-        updateConfig.Memory = resources.memoryLimit * 1024 * 1024; // MB a bytes
+        updateConfig.Memory = resources.memoryLimit * 1024 * 1024;
     }
 
+    // Aplicación inmediata mediante update API
     await container.update(updateConfig);
     return { success: true, name, updatedResources: resources };
 };</code></pre>
-<h3>Creación Dinámica de Servidores</h3>
-<p>El sistema permite instanciar nuevos servidores basados en imágenes pre-configuradas. Se configuran automáticamente los mapeos de puertos y políticas de red.</p>
+<h3>Factoría de Contenedores</h3>
+<p>La creación de servidores no es genérica; utiliza un mapa de imágenes predefinidas para asegurar que los contenedores creados sean compatibles con los servicios de gestión del dashboard (SSH habilitado, usuarios configurados).</p>
 <pre><code class="language-javascript">const createContainer = async (options) =&gt; {
-    const { name, type, cpuLimit, memoryLimit } = options;
-
+    const { name, type } = options;
+    
+    // Mapa de imágenes base optimizadas
     const imageMap = {
         ssh: 'servermanager-ssh-target',
         ftp: 'servermanager-ftp-target',
         web: 'servermanager-web-target'
     };
 
-    // ... validación de imagen ...
-
+    // Configuración automática de red y persistencia
     const containerConfig = {
-        Image: image,
+        Image: imageMap[type],
         name: `${name}-${type}-target`,
         HostConfig: {
             RestartPolicy: { Name: 'unless-stopped' },
-            NetworkMode: 'servermanager_default',
-            // Configuración de límites y puertos...
+            NetworkMode: 'servermanager_default'
         }
     };
-
-    const container = await docker.createContainer(containerConfig);
-    await container.start();
-    return { success: true, id: container.id };
+    // ... (lógica de creación e inicio)
 };</code></pre>
 </section>
 <hr>
-<section id="backend-ssh">
-<h2>💻 Servicio: Cliente SSH</h2>
-<p>Implementado en <code>server/services/sshClient.js</code> usando <code>ssh2</code>. Este servicio no solo ejecuta comandos, sino que parsea salidas de comandos Linux para obtener métricas.</p>
-<h3>Obtención de Métricas (Parsing)</h3>
-<p>Para monitorear el estado interno del contenedor sin agentes externos, se ejecutan comandos de shell como <code>grep</code>, <code>awk</code> y <code>free</code> y se procesa su salida estándar.</p>
-<pre><code class="language-javascript">const getSystemStats = async (host, port, username, password) =&gt; {
-    // Comando para obtener uso de CPU
-    const cpucmd = "grep 'cpu ' /proc/stat | awk '{usage=($2+$4)*100/($2+$4+$5)} END {print usage}'";
-    
-    // Comando para obtener uso de memoria
-    const memcmd = "free -m | awk 'NR==2{printf \"%.2f\", $3*100/$2 }'";
-    
-    // Ejecución paralela
-    const [cpu, mem, disk] = await Promise.all([
-        executeCommand(host, port, username, password, cpucmd),
-        executeCommand(host, port, username, password, memcmd),
-        // ...
-    ]);
+<section id="ngrok-service">
+<h2>🌐 Acceso Remoto: Servicio Ngrok</h2>
+<p>El servicio ubicado en <code>server/services/ngrokService.js</code> permite exponer servidores web locales a internet de forma segura. Gestiona el ciclo de vida de los túneles y evita duplicados mediante un registro de túneles activos.</p>
+<h3>Gestión de Túneles</h3>
+<p>El sistema verifica si ya existe un túnel para el host:puerto solicitado antes de crear uno nuevo, optimizando el uso de conexiones y evitando errores de puerto.</p>
+<pre><code class="language-javascript">const ngrok = require('@ngrok/ngrok');
+let activeTunnels = {};
 
-    return {
-        cpu: parseFloat(cpu) || 0,
-        memory: parseFloat(mem) || 0,
-        // ...
-    };
-};</code></pre>
-</section>
-<hr>
-<section id="backend-ftp">
-<h2>📂 Servicio: Gestor FTP</h2>
-<p>El archivo <code>server/services/ftpService.js</code> utiliza <code>basic-ftp</code>. Permite operaciones complejas como la descarga de archivos binarios a rutas temporales para su posterior procesamiento.</p>
-<pre><code class="language-javascript">// Descarga segura a ruta temporal
-const downloadToPath = async (host, port, user, password, remotePath) =&gt; {
-    const client = await connect(host, port, user, password);
-    const ext = path.extname(remotePath) || '.bin';
-    const localPath = `/tmp/ftp_download_${Date.now()}${ext}`;
-    
-    try {
-        await client.downloadTo(localPath, remotePath);
-        return localPath;
-    } finally {
-        client.close();
+const startTunnel = async (targetHost, targetPort) =&gt; {
+    const key = `${targetHost}:${targetPort}`;
+
+    // 1. Verificación de caché de túneles
+    if (activeTunnels[key] &amp;&amp; activeTunnels[key].url) {
+        return activeTunnels[key];
     }
+
+    // 2. Creación del túnel
+    const listener = await ngrok.forward({
+        addr: `${targetHost}:${targetPort}`,
+        authtoken: process.env.NGROK_AUTHTOKEN,
+        proto: 'http'
+    });
+
+    // 3. Registro del túnel activo
+    activeTunnels[key] = {
+        url: listener.url(),
+        listener: listener,
+        createdAt: Date.now()
+    };
+
+    console.log(`🌐 Ngrok tunnel: ${listener.url()} -&gt; ${key}`);
+    return activeTunnels[key];
+};</code></pre>
+<h3>Limpieza de Recursos</h3>
+<p>Es crítico cerrar los túneles correctamente para no dejar procesos zombies. El servicio incluye una función para detener todos los túneles simultáneamente.</p>
+<pre><code class="language-javascript">const stopAllTunnels = async () =&gt; {
+    for (const key of Object.keys(activeTunnels)) {
+        if (activeTunnels[key].listener) {
+            await activeTunnels[key].listener.close();
+        }
+    }
+    activeTunnels = {};
+};</code></pre>
+</section>
+<hr>
+<section id="ssh-ftp">
+<h2>💻 Protocolos: SSH y FTP</h2>
+<h3>Cliente SSH y Parsing de Métricas</h3>
+<p>El servicio SSH (<code>sshClient.js</code>) no requiere agentes instalados en los servidores destino. Utiliza comandos estándar de Linux (<code>grep</code>, <code>awk</code>, <code>df</code>) para extraer métricas vitales y parsearlas en JSON.</p>
+<pre><code class="language-javascript">// Ejemplo: Obtención de uso de disco sin agentes
+const diskcmd = "df -h / | awk 'NR==2 {print $5}' | sed 's/%//'";
+const diskUsage = await executeCommand(host, port, user, pass, diskcmd);</code></pre>
+<h3>Gestión Avanzada de FTP</h3>
+<p>El servicio FTP (<code>ftpService.js</code>) maneja transferencias complejas. Para la edición de archivos, implementa un flujo de descarga temporal -&gt; lectura -&gt; edición -&gt; subida.</p>
+<pre><code class="language-javascript">const downloadToPath = async (host, port, user, password, remotePath) =&gt; {
+    // Generación de ruta temporal segura en el contenedor API
+    const localPath = `/tmp/ftp_download_${Date.now()}.bin`;
+    await client.downloadTo(localPath, remotePath);
+    return localPath;
 };</code></pre>
 </section>
 <hr>
 <section id="telegram-bot">
-<h2>🤖 Lógica del Bot de Telegram</h2>
-<p>El servicio <code>server/services/telegramBot.js</code> implementa un sistema de logs en memoria y una interfaz visual basada en texto para Telegram.</p>
-<h3>Visualización de Estadísticas (ASCII Art)</h3>
-<p>Genera barras de progreso visuales utilizando caracteres Unicode para representar el uso de CPU y RAM directamente en el chat.</p>
+<h2>🤖 Automatización: Bot de Telegram</h2>
+<p>El bot (<code>server/services/telegramBot.js</code>) actúa como una segunda interfaz completa. Implementa un sistema de logs propio que se sincroniza con el dashboard web.</p>
+<h3>Visualización de Datos (ASCII Art)</h3>
+<p>Para mostrar estadísticas de forma gráfica en una interfaz de texto, el bot renderiza barras de progreso usando caracteres Unicode.</p>
 <pre><code class="language-javascript">const createProgressBar = (percentage) =&gt; {
-    const total = 10;
-    const filled = Math.round((percentage / 100) * total);
-    // Genera barra tipo: 🔴 █████░░░░░
-    return '█'.repeat(filled) + '░'.repeat(total - filled);
-};
-
-const formatStats = (stats, serverNumber, serverName) =&gt; {
-    // Lógica para indicadores de color según severidad
-    const getIndicator = (value) =&gt; {
-        if (value &gt;= 90) return '🔴';
-        if (value &gt;= 70) return '🟠';
-        return '🟢';
-    };
-    // Retorna string formateado en Markdown
+    const filled = Math.round((percentage / 100) * 10);
+    // Resultado visual: 🟢 ██████░░░░ 60%
+    return '█'.repeat(filled) + '░'.repeat(10 - filled);
 };</code></pre>
-<h3>Ejecución de Comandos SSH desde Chat</h3>
-<p>El bot intercepta comandos con regex (<code>/\/ssh (\d+)\s+(.+)/</code>), valida el tipo de servidor y ejecuta el comando remoto, devolviendo la salida en un bloque de código.</p>
-<pre><code class="language-javascript">bot.onText(/\/ssh (\d+)\s+(.+)/, async (msg, match) =&gt; {
-    const serverNum = parseInt(match[1]);
-    const command = match[2].trim();
-
-    // ... validación de servidor ...
-
-    const output = await sshService.executeCommand(
-        server.name, 22, 'root', 'password', command
-    );
-
-    const response = `
-💻 *Resultado SSH - #${serverNum}*
-📝 *Comando:* \`${command}\`
-📤 *Salida:*
-\`\`\`
-${output.substring(0, 3000)}
-\`\`\`
-    `;
-    bot.sendMessage(chatId, response, { parse_mode: 'Markdown' });
+<h3>Comandos e Interactividad</h3>
+<p>El bot escucha patrones regex para ejecutar acciones complejas, como sesiones SSH remotas directamente desde el chat.</p>
+<div class="chat-simulation" style="background: #1e293b; color: #e2e8f0; padding: 15px; border-radius: 8px; font-family: monospace; margin-bottom: 15px;">
+<p style="color: #60a5fa;"><strong>Usuario:</strong> /ssh 1 ls -la /var/www</p>
+<p><strong>Bot:</strong> 🔄 Ejecutando: `ls -la /var/www`...</p>
+<hr style="border-color: #334155;">
+<p><strong>Bot:</strong><br>💻 <strong>Resultado SSH - #1</strong><br>📤 <strong>Salida:</strong><br>drwxr-xr-x 2 root root 4096 Jan 20 10:00 html<br>-rw-r--r-- 1 root root 612 Jan 19 15:30 index.nginx-debian.html</p>
+</div>
+<pre><code class="language-javascript">// Manejador de comando SSH
+bot.onText(/\/ssh (\d+)\s+(.+)/, async (msg, match) =&gt; {
+    const serverNum = parseInt(match[1]); // ID del servidor
+    const command = match[2];             // Comando a ejecutar
+    
+    // Ejecución y respuesta formateada en Markdown
+    const output = await sshService.executeCommand(...);
+    bot.sendMessage(chatId, `\`\`\`${output}\`\`\``, { parse_mode: 'Markdown' });
 });</code></pre>
 </section>
 <hr>
-<section id="frontend-logic">
-<h2>🎨 Componentes Frontend (React)</h2>
-<h3>Terminal Web (Xterm.js + Socket.IO)</h3>
-<p>El componente <code>Terminal.jsx</code> crea un puente bidireccional. Captura la entrada del usuario en el navegador, la envía por WebSocket al backend, y escribe la respuesta del shell SSH en el canvas de xterm.</p>
-<pre><code class="language-javascript">useEffect(() =&gt; {
-    const term = new Terminal({ cursorBlink: true });
-    // ... configuración de tema ...
-    
-    const socket = io();
-
-    socket.on('connect', () =&gt; {
-        socket.emit('start-terminal', {
-            host: serverName,
-            port: 22,
-            // credenciales...
-        });
+<section id="frontend">
+<h2>🎨 Dashboard &amp; Terminal Web</h2>
+<h3>Terminal SSH en Navegador</h3>
+<p>La terminal (<code>Terminal.jsx</code>) utiliza <code>Socket.IO</code> para transmitir pulsaciones de teclas en tiempo real al backend, que las retransmite al servidor SSH, logrando una latencia mínima.</p>
+<pre><code class="language-javascript">// Frontend: Conexión WebSocket para terminal
+socket.on('connect', () =&gt; {
+    term.write(`\r\nConectando a ${serverName}...\r\n`);
+    socket.emit('start-terminal', {
+        host: serverName,
+        port: 22,
+        username: 'admin',
+        password: 'password'
     });
+});
 
-    // Escribir datos recibidos del servidor en la terminal
-    socket.on('data', (data) =&gt; {
-        term.write(data);
-    });
-
-    // Enviar input del usuario al servidor
-    term.onData(data =&gt; {
-        socket.emit('input', data);
-    });
-
-    return () =&gt; { socket.disconnect(); term.dispose(); };
-}, [serverName]);</code></pre>
+// Recepción de stream de datos del servidor
+socket.on('data', (data) =&gt; {
+    term.write(data); // Escribe directamente en xterm.js
+});</code></pre>
 <h3>Panel de Control del Bot</h3>
-<p>El dashboard permite a los administradores ver qué está sucediendo en el bot de Telegram en tiempo real mediante un polling al endpoint de logs.</p>
-<pre><code class="language-javascript">const TelegramBotPanel = () =&gt; {
-    const [logs, setLogs] = useState([]);
-
-    // Auto-refresh cada 5 segundos para simular tiempo real
-    useEffect(() =&gt; {
-        const interval = setInterval(() =&gt; {
-            fetchLogs();
-            fetchStatus();
-        }, 5000);
-        return () =&gt; clearInterval(interval);
-    }, []);
-
-    // ... renderizado de tabla de logs ...
-}</code></pre>
+<p>El dashboard incluye un visor de logs en tiempo real (<code>TelegramBotPanel.jsx</code>) que permite a los administradores auditar las interacciones del bot y enviar mensajes proactivos.</p>
 </section>
 <hr>
-<section id="api-endpoints">
-<h2>🌐 Referencia de API REST</h2>
-<p>La comunicación entre el frontend y los microservicios se realiza a través de una API RESTful documentada a continuación.</p>
-<h3>Servidores (Docker)</h3>
+<section id="api">
+<h2>🌐 Referencia API</h2>
+<p>Endpoints principales expuestos por el servidor Express.</p>
 <div class="table-wrapper">
 <table>
 <thead>
 <tr>
+<th>Contexto</th>
 <th>Método</th>
 <th>Endpoint</th>
-<th>Payload</th>
 <th>Descripción</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>POST</code></td>
-<td><code>/api/servers/docker/create</code></td>
-<td><code>{ name, type, cpuLimit }</code></td>
-<td>Crea un nuevo contenedor basado en plantillas.</td>
+<td><strong>Docker</strong></td>
+<td>POST</td>
+<td><code>/api/servers/:name/start</code></td>
+<td>Inicia un contenedor detenido.</td>
 </tr>
 <tr>
-<td><code>PUT</code></td>
+<td><strong>Docker</strong></td>
+<td>PUT</td>
 <td><code>/api/servers/:name/resources</code></td>
-<td><code>{ cpuLimit, memoryLimit }</code></td>
-<td>Actualiza límites de recursos en caliente.</td>
+<td>Actualiza CPU/RAM en caliente.</td>
 </tr>
 <tr>
-<td><code>GET</code></td>
-<td><code>/api/servers/:name/inspect</code></td>
-<td>-</td>
-<td>Devuelve JSON crudo de <code>docker inspect</code>.</td>
-</tr>
-</tbody>
-</table>
-</div>
-<h3>Archivos (FTP)</h3>
-<div class="table-wrapper">
-<table>
-<thead>
-<tr>
-<th>Método</th>
-<th>Endpoint</th>
-<th>Payload</th>
-<th>Descripción</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>POST</code></td>
-<td><code>/api/ftp/list</code></td>
-<td><code>{ host, path }</code></td>
-<td>Lista archivos y directorios del path remoto.</td>
+<td><strong>Web</strong></td>
+<td>POST</td>
+<td><code>/api/web/deploy</code></td>
+<td>Despliega archivos al servidor web.</td>
 </tr>
 <tr>
-<td><code>POST</code></td>
-<td><code>/api/ftp/save</code></td>
-<td><code>{ path, content }</code></td>
-<td>Guarda contenido de texto en el archivo remoto.</td>
+<td><strong>Telegram</strong></td>
+<td>GET</td>
+<td><code>/api/telegram/logs</code></td>
+<td>Obtiene historial de chat del bot.</td>
 </tr>
 </tbody>
 </table>
