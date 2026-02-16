@@ -3,12 +3,183 @@
     <title>Desarrollo de interfaces</title>
     <link href="https://RubenGarcia11.github.io/DocumentacionDesarrolloInterfaces/feed.xml" rel="self" />
     <link href="https://RubenGarcia11.github.io/DocumentacionDesarrolloInterfaces" />
-    <updated>2026-01-21T16:54:53+01:00</updated>
+    <updated>2026-02-17T00:37:43+01:00</updated>
     <author>
         <name>Rubén García</name>
     </author>
     <id>https://RubenGarcia11.github.io/DocumentacionDesarrolloInterfaces</id>
 
+    <entry>
+        <title>Gestor Finanzas Personales</title>
+        <author>
+            <name>Rubén García</name>
+        </author>
+        <link href="https://RubenGarcia11.github.io/DocumentacionDesarrolloInterfaces/gestor-finanzas-personales.html"/>
+        <id>https://RubenGarcia11.github.io/DocumentacionDesarrolloInterfaces/gestor-finanzas-personales.html</id>
+
+        <updated>2026-02-17T00:37:43+01:00</updated>
+            <summary>
+                <![CDATA[
+                    FinanzasPers FinanzasPers es una aplicación multiplataforma de vanguardia para la gestión de finanzas personales, diseñada con un enfoque en la estética premium y la inteligencia artificial local. FinanzasPers no es solo un gestor de gastos; es una experiencia visual. Utiliza una estética Glassmorphism que simula&hellip;
+                ]]>
+            </summary>
+        <content type="html">
+            <![CDATA[
+                <article>
+<h1>FinanzasPers</h1>
+<p><strong>FinanzasPers</strong> es una aplicación multiplataforma de vanguardia para la gestión de finanzas personales, diseñada con un enfoque en la estética premium y la inteligencia artificial local.</p>
+<p align="center"><img src="https://img.shields.io/github/v/release/RubenGarcia11/FinanzasPersonales?color=blueviolet" alt="GitHub release" data-is-external-image="true">  <img loading="lazy" src="https://img.shields.io/badge/Maintained%20with-Expo-000000.svg?style=flat&amp;logo=expo" alt="Expo" data-is-external-image="true"></p>
+<hr>
+<h2>🌟 Visión del Proyecto</h2>
+<p>FinanzasPers no es solo un gestor de gastos; es una experiencia visual. Utiliza una estética <strong>Glassmorphism</strong> que simula paneles de cristal esmerilado con iluminación dinámica, micro-animaciones y un motor de IA que permite procesar recibos sin enviar datos a la nube.</p>
+<hr>
+<h2>🚀 Características Técnicas Destacadas</h2>
+<h3>1. Inteligencia Artificial Local (Ollama)</h3>
+<p>La aplicación integra un cliente para <strong>Ollama</strong>, permitiendo el uso de modelos de visión como <strong>Qwen2-VL</strong> directamente.</p>
+<pre><code>// Fragmento de src/lib/ollama.ts
+export async function processTicketWithOllama(imageUri: string, model = 'qwen2-vl:7b') {
+    const base64Image = await readFileAsBase64(imageUri);
+    const prompt = `Analyze this receipt/ticket image and extract... {
+      "category": "one of: food, transport...",
+      "amount": total amount as number,
+      "merchant": business name
+    } (Return ONLY raw JSON)`;
+
+    const response = await fetch(`${serverUrl}/api/generate`, {
+        method: 'POST',
+        body: JSON.stringify({ model, prompt, images: [base64Image], stream: false }),
+    });
+    // ... parseo y normalización de datos
+}</code></pre>
+<h3>2. Arquitectura Multiplataforma Híbrida</h3>
+<p>Configuración optimizada de <strong>Supabase</strong> para manejar sesiones de forma persistente tanto en Native (AsyncStorage) como en Web (localStorage).</p>
+<pre><code>// Fragmento de src/lib/supabase.ts
+const storage = Platform.OS === 'web' ? webStorage : AsyncStorage;
+
+export const supabase = createClient&lt;Database&gt;(URL, KEY, {
+    auth: {
+        storage: storage as any,
+        autoRefreshToken: true,
+        persistSession: true,
+        detectSessionInUrl: Platform.OS === 'web',
+    },
+});</code></pre>
+<h3>3. UI System: Glassmorphism Core</h3>
+<p>El sistema de diseño utiliza una combinación de <code>BlurView</code> y gradientes lineales para lograr el efecto de "cristal".</p>
+<pre><code>// Fragmento de src/components/ui/GlassCard.tsx
+export function GlassCard({ children, intensity = 60, tint = 'dark' }) {
+    return (
+        &lt;View style={styles.container}&gt;
+            &lt;BlurView intensity={intensity} tint={tint} style={StyleSheet.absoluteFill} /&gt;
+            &lt;LinearGradient
+                colors={['rgba(255, 255, 255, 0.12)', 'rgba(255, 255, 255, 0.04)']}
+                style={StyleSheet.absoluteFill}
+            /&gt;
+            &lt;View style={styles.content}&gt;{children}&lt;/View&gt;
+        &lt;/View&gt;
+    );
+}</code></pre>
+<h3>4. Internacionalización Dinámica (i18n)</h3>
+<p>Detección automática de idioma del dispositivo con fallback inteligente.</p>
+<pre><code>// Fragmento de src/i18n/index.ts
+const deviceLanguage = Localization.getLocales()[0]?.languageCode || 'es';
+const defaultLanguage = supportedLanguages.includes(deviceLanguage) ? deviceLanguage : 'es';
+
+i18n.use(initReactI18next).init({
+    resources,
+    lng: defaultLanguage,
+    fallbackLng: 'es',
+});</code></pre>
+<hr>
+<h2>🛠️ Stack de Desarrollo</h2>
+<table>
+<thead>
+<tr>
+<th>Tecnología</th>
+<th>Propósito</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Expo (React Native)</strong></td>
+<td>Motor principal multiplataforma</td>
+</tr>
+<tr>
+<td><strong>Supabase</strong></td>
+<td>Backend-as-a-Service (Auth &amp; DB)</td>
+</tr>
+<tr>
+<td><strong>Ollama</strong></td>
+<td>Procesamiento de IA local (Vision/LLM)</td>
+</tr>
+<tr>
+<td><strong>NativeWind</strong></td>
+<td>Estilado basado en utilidades Tailwind</td>
+</tr>
+<tr>
+<td><strong>Redux Toolkit</strong></td>
+<td>Gestión de estado complejo</td>
+</tr>
+<tr>
+<td><strong>TanStack Query</strong></td>
+<td>Cacheo y sincronización de datos</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>📂 Organización del Código</h2>
+<pre><code>FinanzasPers/
+├── app/                  # Sistema de rutas basado en archivos (Expo Router)
+├── src/
+│   ├── components/ui/    # Componentes de diseño (GlassButton, Input, Card)
+│   ├── lib/              # Servicios core (Supabase, Ollama, AI logic)
+│   ├── i18n/             # Localización (EN/ES)
+│   └── store/            # Lógica de Redux y Slices
+├── assets/               # Fuentes premium e iconos
+└── eas.json              # Configuración de compilación nativa</code></pre>
+<hr>
+<h2>⚙️ Configuración Inicial</h2>
+<ol>
+<li><strong>Instalación</strong>: <code>npm install</code></li>
+<li><strong>Entorno</strong>: Configura el archivo <code>.env</code> (guíate por <code>.env.example</code>)</li>
+<li><strong>IA</strong>: Descarga Ollama y corre <code>ollama run qwen2-vl:7b</code></li>
+<li><strong>Ejecución</strong>: <code>npm run dev</code> o <code>npx expo start</code></li>
+</ol>
+<hr>
+<h2>🏗️ Despliegue y Compilación (Expo &amp; EAS)</h2>
+<p>El proyecto utiliza <strong>Expo Application Services (EAS)</strong> para facilitar la generación de binarios nativos sin necesidad de configurar Android Studio o Xcode localmente.</p>
+<h3>1. Requisitos Previos</h3>
+<ul>
+<li>Tener una cuenta en <a href="https://expo.dev/">Expo.dev</a>.</li>
+<li>Instalar EAS CLI globalmente: <code>npm install -g eas-cli</code>.</li>
+<li>Iniciar sesión: <code>eas login</code>.</li>
+</ul>
+<h3>2. Configuración de EAS (<code>eas.json</code>)</h3>
+<pre><code>{
+  "build": {
+    "preview": {
+      "android": {
+        "buildType": "apk"
+      }
+    }
+  }
+}</code></pre>
+<h3>3. Generar APK de Android</h3>
+<p>Para generar una versión de prueba (APK) que puedas instalar en cualquier dispositivo Android, ejecuta:</p>
+<code>eas build --platform android --profile preview</code>
+<p><strong>Nota:</strong> Durante el proceso, EAS te preguntará si deseas generar las credenciales de Android (Keystore). Di que <strong>sí</strong> para que Expo las gestione automáticamente.</p>
+<h3>4. Monitoreo y Descarga</h3>
+<p>Una vez lanzado el comando, puedes seguir el progreso en la terminal o en el dashboard de Expo. Al finalizar, obtendrás un enlace de descarga o un código QR para instalar la app.</p>
+<hr>
+<h2>📦 Releases</h2>
+<p>Las versiones compiladas listas para instalar en Android se encuentran en: 👉 <strong><a href="https://github.com/RubenGarcia11/FinanzasPersonales/releases">GitHub Releases</a></strong></p>
+<hr>
+<h2>📄 Concesión de Licencia</h2>
+<p>Este software se distribuye bajo la <strong>Licencia MIT</strong>. Siéntete libre de usarlo, modificarlo y distribuirlo conservando la atribución original.</p>
+</article>
+            ]]>
+        </content>
+    </entry>
     <entry>
         <title>Dashboard de servidores</title>
         <author>
